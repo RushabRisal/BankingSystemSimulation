@@ -1,5 +1,4 @@
 using BankingSystem.Domain.DomainRules;
-using BankingSystem.Domain.DomainRules.IDomain;
 using BankingSystem.Domain.Models;
 
 namespace BankingSystem.UnitTesting

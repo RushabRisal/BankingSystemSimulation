@@ -1,5 +1,6 @@
 using Scalar.AspNetCore;
 using BankingSystem.Infrastructure.DbConfig;
+using BankingSystem.API.ExceptionCatcher;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -14,8 +15,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //DbService 
-builder.Services.AddDatabaseContext(builder.Configuration);
+builder.Services.GetSerives(builder.Configuration);
 
+
+//exceptionhandler registry
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 var app = builder.Build();
 
@@ -30,6 +34,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+app.UseExceptionHandler(_ => { });
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -39,5 +44,5 @@ app.UseEndpoints(endpoints =>
     _ = endpoints.MapControllers();
 });
 
-//app.Urls.Add($"https://localhost:{port}");
+app.Urls.Add($"https://localhost:{port}");
 app.Run();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BankingSystem.Domain.Models;
+using System;
 using System.Collections.Generic;
 
 namespace BankingSystem.Infrastructure.Persistence.Entities;
@@ -30,4 +31,5 @@ public partial class User
     public virtual ICollection<AuditLog> AuditLogs { get; set; } = new List<AuditLog>();
 
     public virtual ICollection<BankAccount> BankAccounts { get; set; } = new List<BankAccount>();
+
 }

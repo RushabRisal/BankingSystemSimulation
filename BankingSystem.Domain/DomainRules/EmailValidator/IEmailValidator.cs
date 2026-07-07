@@ -1,5 +1,4 @@
-﻿
-namespace BankingSystem.Domain.DomainRules.IDomain
+﻿namespace BankingSystem.Domain.DomainRules.EmailValidator
 {
     public interface IEmailValidator
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BankingSystem.Domain.DomainException;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankingSystem.API.Controllers
@@ -10,7 +11,7 @@ namespace BankingSystem.API.Controllers
         [HttpGet]
         public string GetHello()
         {
-            return "Hello!";
+            throw new InvalidEmailFormat("The email is not in Standard Format");
         }
     }
 }
