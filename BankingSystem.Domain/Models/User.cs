@@ -1,9 +1,9 @@
 ﻿
 
 using BankingSystem.Domain.DomainException;
-using BankingSystem.Domain.DomainRules;
-using BankingSystem.Domain.DomainRules.IDomain;
+using BankingSystem.Domain.DomainRules.EmailValidator;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BankingSystem.Domain.Models
 {
@@ -19,9 +19,9 @@ namespace BankingSystem.Domain.Models
         public required string Contact { get; set; }
         public required string PasswordHash { get; set; }
         public required string Role { get; set; }
-
+        [SetsRequiredMembers]
         public UserModel(
-            string FirstName,
+string FirstName,
             string MiddleName,
             string LastName,
             string Contact,
@@ -34,6 +34,7 @@ namespace BankingSystem.Domain.Models
             this.MiddleName = MiddleName;
             this.LastName = LastName;
             this.Email = IsEmailValid(Email);
+            
             this.Contact = Contact;
             this.PasswordHash = PasswordHash;
             this.Role = Role;
