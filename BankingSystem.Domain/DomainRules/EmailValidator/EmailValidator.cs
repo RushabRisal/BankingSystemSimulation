@@ -1,6 +1,4 @@
-﻿using BankingSystem.Domain.DomainException;
-using DnsClient;
-using DnsClient.Protocol;
+﻿using DnsClient;
 using System.Net.Mail;
 
 namespace BankingSystem.Domain.DomainRules.EmailValidator

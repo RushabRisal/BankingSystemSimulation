@@ -1,8 +1,9 @@
 ﻿
 
+
 namespace BankingSystem.Application.DTOs.UserDto
 {
-    public record RequestRegistry
+    public record RequestRegistryDto
     {
         public required string FirstName { get; init; }
         public string? MiddleName { get; init; }
@@ -12,11 +13,21 @@ namespace BankingSystem.Application.DTOs.UserDto
         public required string Password { get; init; }
         public required string Role { get; init; }
     };
-    public record ResponseRegistry
+    public record ResponseRegistryDto
     {
         public required string Email { get; init; }
     }
 
+    public record RequestLoginDto
+    {
+        public required string Email { get; init; }
+        public required string Password { get; init; }
+    }
+    public record LoginResponseDto
+    {
+        public required string PasswordHash { get; init; }
+
+    }
 
 }
 
