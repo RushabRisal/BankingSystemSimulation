@@ -4,6 +4,7 @@ namespace BankingSystem.Application.IServices.IAuthentication
 {
     public interface IAuthService
     {
-        Task<ResponseRegistry> RegisterAsync(RequestRegistry user);
+        Task<ResponseRegistryDto> RegisterAsync(RequestRegistryDto user);
+        Task<bool> LoginAsync(RequestLoginDto user);
     }
 }
