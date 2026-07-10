@@ -1,9 +1,12 @@
-﻿using DnsClient;
+﻿
+
+using BankingSystem.Application.IServices.IValidation;
+using DnsClient;
 using System.Net.Mail;
 
-namespace BankingSystem.Domain.DomainRules.EmailValidator
+namespace BankingSystem.Application.Services.Validator
 {
-    public class EmailValidator : IEmailValidator
+    public class ValidationServices : IValidatorServices
     {
         private static async Task<bool> DnsCheck(string domain)
         {
@@ -16,10 +19,10 @@ namespace BankingSystem.Domain.DomainRules.EmailValidator
             IDnsQueryResponse result = await lookup.QueryAsync(domain, QueryType.MX).ConfigureAwait(false);
             return result.Answers.Any();
         }
-        public async Task<bool> IsEmailValid(string Email)
+        public Task<bool> IsValidEmail(string Email)
         {
             var mailAddress = new MailAddress(Email);
-            var res = await DnsCheck(mailAddress.Host);
+            var res = DnsCheck(mailAddress.Host);
             return res;
         }
     }

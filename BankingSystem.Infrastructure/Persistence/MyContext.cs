@@ -139,6 +139,7 @@ public partial class MyContext(DbContextOptions<MyContext> options) : DbContext(
             entity.Property(e => e.MiddleName).HasMaxLength(20);
             entity.Property(e => e.PasswordHash).HasMaxLength(255);
             entity.Property(e => e.Role).HasMaxLength(20);
+            entity.Property(e => e.RefreshToken).HasMaxLength(255);
         });
 
         OnModelCreatingPartial(modelBuilder);

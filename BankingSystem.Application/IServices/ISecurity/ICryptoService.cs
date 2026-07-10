@@ -1,7 +1,6 @@
 ﻿
 
 using BankingSystem.Domain.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace BankingSystem.Application.IServices.ISecurity
 {

@@ -23,9 +23,10 @@ namespace BankingSystem.Application.DTOs.UserDto
         public required string Email { get; init; }
         public required string Password { get; init; }
     }
-    public record LoginResponseDto
+    public record TokenResponse
     {
-        public required string PasswordHash { get; init; }
+        public required string AccessToken { get; init; }
+        public required string RefreshToken { get; set; }
 
     }
 

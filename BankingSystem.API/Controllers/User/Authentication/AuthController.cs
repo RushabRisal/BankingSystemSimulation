@@ -23,7 +23,9 @@ namespace BankingSystem.API.Controllers.User.Authentication
         public async Task<IActionResult> LoginUser([FromBody] RequestLoginDto user)
         {
             var response = await _auth.LoginAsync(user);
-            return response ? Ok(response) : NotFound();
+            if (response is null) return Unauthorized();
+            _auth.SetCookie(request: response, context: HttpContext);
+            return Ok();
         }
 
     }

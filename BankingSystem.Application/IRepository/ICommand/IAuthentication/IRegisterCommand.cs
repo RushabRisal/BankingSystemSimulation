@@ -8,4 +8,8 @@ namespace BankingSystem.Application.IRepository.ICommand.IAuthentication
     {
         Task<bool> RegisterUserCommand(UserModel userData);
     }
+    public interface ILoginCommandRepository
+    {
+        Task<bool> SaveRefreshTokenCommand(string refreshToken, string Email);
+    }
 }
