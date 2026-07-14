@@ -1,10 +1,8 @@
-﻿using BankingSystem.Application.DTOs.UserDto;
+﻿
 using BankingSystem.Application.IRepository.IQuery.IAuthentication;
 using BankingSystem.Domain.Models;
-using BankingSystem.Infrastructure.InfraExceptionHandler;
 using BankingSystem.Infrastructure.Persistence;
 using Dapper;
-using Microsoft.AspNetCore.Identity;
 namespace BankingSystem.Infrastructure.Repository.Query.AuthenticationQuery
 {
     public class AuthenticationRepository(MyDapperContext _context) : IUserRepository
@@ -17,6 +15,15 @@ namespace BankingSystem.Infrastructure.Repository.Query.AuthenticationQuery
                     new { Email }
                 );
             return user;
+        }
+
+        public async Task<UserModel?> VerifyUserRefreshToken(string refreshToken)
+        {
+            using var conn = _context.CreateConnection();
+            string @query = """SELECT * FROM Users WHERE RefreshToken = @refreshToken""" ?? "";
+            return await conn.QueryFirstOrDefaultAsync<UserModel>(query,
+                    new { refreshToken }
+                );
         }
     }
 }

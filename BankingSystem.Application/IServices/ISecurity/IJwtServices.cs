@@ -5,6 +5,6 @@ namespace BankingSystem.Application.IServices.ISecurity
 {
     public interface IJwtServices
     {
-        Task<TokenResponse> CreateTokens(UserModel user, string Email);
+        Task<TokenResponse> CreateTokens(UserModel user);
     }
 }

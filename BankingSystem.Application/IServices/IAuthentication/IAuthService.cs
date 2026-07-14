@@ -7,6 +7,7 @@ namespace BankingSystem.Application.IServices.IAuthentication
     {
         Task<ResponseRegistryDto> RegisterAsync(RequestRegistryDto user);
         Task<TokenResponse?> LoginAsync(RequestLoginDto user);
+        Task<TokenResponse?> RefreshTokenAsync(string refreshToken);
         void SetCookie(TokenResponse request, HttpContext context);
     }
 }

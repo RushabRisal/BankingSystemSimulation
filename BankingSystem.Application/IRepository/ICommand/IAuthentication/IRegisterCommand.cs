@@ -10,6 +10,6 @@ namespace BankingSystem.Application.IRepository.ICommand.IAuthentication
     }
     public interface ILoginCommandRepository
     {
-        Task<bool> SaveRefreshTokenCommand(string refreshToken, string Email);
+        Task<bool> SaveRefreshTokenCommand(string refreshToken,string Email);
     }
 }

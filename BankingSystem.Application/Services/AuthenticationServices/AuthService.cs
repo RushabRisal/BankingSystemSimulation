@@ -1,6 +1,4 @@
-﻿
-
-using BankingSystem.Application.DTOs.UserDto;
+﻿using BankingSystem.Application.DTOs.UserDto;
 using BankingSystem.Application.IRepository.ICommand.IAuthentication;
 using BankingSystem.Application.IRepository.IQuery.IAuthentication;
 using BankingSystem.Application.IServices.IAuthentication;
@@ -38,7 +36,7 @@ namespace BankingSystem.Application.Services.AuthenticationServices
             var user = await _user.GetUserCredentialByEmail<UserModel>(userData.Email);
             string userHashedPassword = user.PasswordHash;
             var result = _crypto.IsPasswordValid(user: null!, hashedPassword: userHashedPassword, toBeComparedPassword: userData.Password);
-            return !result ? null : await _jwt.CreateTokens(user, user.Email);
+            return !result ? null : await _jwt.CreateTokens(user);
 
         }
         public void SetCookie(TokenResponse request, HttpContext context)
@@ -63,6 +61,14 @@ namespace BankingSystem.Application.Services.AuthenticationServices
                         Secure = true
                     }
                 );
+        }
+
+        public async Task<TokenResponse?> RefreshTokenAsync(string refreshToken)
+        {
+            var user = await _user.VerifyUserRefreshToken(refreshToken);
+            if (user is null || user.ExpireAt < DateTime.UtcNow) return null;
+            return await _jwt.CreateTokens(user);
+
         }
     }
 }

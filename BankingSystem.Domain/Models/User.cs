@@ -18,4 +18,9 @@ namespace BankingSystem.Domain.Models
         public string? RefreshToken { get; set; }
         public DateTime? ExpireAt { get; set; }
     }
+
+    public class RefreshTokenExpiry
+    {
+        public DateTime? ExpireAt { get; set; }
+    }
 }

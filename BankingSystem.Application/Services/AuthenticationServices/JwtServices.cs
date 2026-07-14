@@ -57,17 +57,17 @@ namespace BankingSystem.Application.Services.AuthenticationServices
                     audience: audience,
                     claims: claim,
                     signingCredentials: cred,
-                    expires: DateTime.UtcNow.AddMinutes(_options.LifeSpanInMinutes)
+                    expires: DateTime.UtcNow.AddMinutes(lifeSpan)
                 );
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
 
-        public async Task<TokenResponse> CreateTokens(UserModel user, string Email)
+        public async Task<TokenResponse> CreateTokens(UserModel user)
         {
             return new TokenResponse
             {
                 AccessToken = GetJwtClaims(user),
-                RefreshToken = await SaveAndReturnRefreshToken(Email)
+                RefreshToken = await SaveAndReturnRefreshToken(user.Email)
             };
         }
     }

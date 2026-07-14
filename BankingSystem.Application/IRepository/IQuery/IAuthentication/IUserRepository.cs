@@ -7,5 +7,6 @@ namespace BankingSystem.Application.IRepository.IQuery.IAuthentication
     public interface IUserRepository
     {
         Task<T?> GetUserCredentialByEmail<T>(string Email);
+        Task<UserModel?> VerifyUserRefreshToken(string refreshToken);
     }
 }

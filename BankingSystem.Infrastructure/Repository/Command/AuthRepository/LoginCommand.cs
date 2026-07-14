@@ -1,11 +1,10 @@
 ﻿using BankingSystem.Application.IRepository.ICommand.IAuthentication;
-using BankingSystem.Application.IRepository.IQuery.IAuthentication;
 using BankingSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankingSystem.Infrastructure.Repository.Command.AuthRepository
 {
-    internal class LoginCommand(IUserRepository _user, MyContext _context) : ILoginCommandRepository
+    internal class LoginCommand(MyContext _context) : ILoginCommandRepository
     {
         public async Task<bool> SaveRefreshTokenCommand(string refreshToken, string Email)
         {
