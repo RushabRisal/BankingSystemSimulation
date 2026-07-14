@@ -1,4 +1,5 @@
-﻿using BankingSystem.Application.DTOs.SystemDto;
+﻿using BankingSystem.Application.DTOs;
+using BankingSystem.Application.DTOs.SystemDto;
 using BankingSystem.Domain.DomainException;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
@@ -12,7 +13,7 @@ namespace BankingSystem.API.ExceptionCatcher
             httpContext.Response.ContentType = "application/json";
             var (statusCode, message) = exception switch
             {
-                EmailException ex =>
+                ExceptionCarrier ex =>
                     (ex.StatusCode, ex.Message),
                 _ => ((int)HttpStatusCode.InternalServerError, exception.Message)
             };

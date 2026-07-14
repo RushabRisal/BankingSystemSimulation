@@ -25,6 +25,8 @@ public partial class User
     public DateTime CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+    public string? RefreshToken { get; set; }
+    public DateTime? ExpireAt { get; set; }
 
     public virtual ICollection<AccountFreezeHistory> AccountFreezeHistories { get; set; } = new List<AccountFreezeHistory>();
 

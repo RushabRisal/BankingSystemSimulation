@@ -20,6 +20,7 @@
 
 	<ItemGroup>
 		<Folder Include="ApplicationExceptions\" />
+		<Folder Include="IRepository\ICommand\NewFolder\" />
 	</ItemGroup>
 
 </Project>

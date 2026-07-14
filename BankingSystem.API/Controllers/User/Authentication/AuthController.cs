@@ -23,7 +23,19 @@ namespace BankingSystem.API.Controllers.User.Authentication
         public async Task<IActionResult> LoginUser([FromBody] RequestLoginDto user)
         {
             var response = await _auth.LoginAsync(user);
-            return response ? Ok(response) : NotFound();
+            if (response is null) return Unauthorized();
+            _auth.SetCookie(request: response, context: HttpContext);
+            return Ok();
+        }
+        [HttpPost("/refreshtoken")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            HttpContext.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
+            if (refreshToken is null) return Unauthorized();
+            var token = await _auth.RefreshTokenAsync(refreshToken);
+            if (token is null) return Unauthorized();
+            _auth.SetCookie(request: token, HttpContext);
+            return Ok();
         }
 
     }

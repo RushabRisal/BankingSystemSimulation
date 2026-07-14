@@ -1,35 +1,73 @@
-﻿
-
-using BankingSystem.Application.DTOs.UserDto;
+﻿using BankingSystem.Application.DTOs.UserDto;
 using BankingSystem.Application.IRepository.ICommand.IAuthentication;
 using BankingSystem.Application.IRepository.IQuery.IAuthentication;
 using BankingSystem.Application.IServices.IAuthentication;
 using BankingSystem.Application.IServices.ISecurity;
+using BankingSystem.Application.IServices.IValidation;
+using BankingSystem.Domain.DomainException;
 using BankingSystem.Domain.Models;
-
+using Microsoft.AspNetCore.Http;
 namespace BankingSystem.Application.Services.AuthenticationServices
 {
-    public class AuthService(IRegisterCommand _register, IUserRepository _user, ICryptoService _crypto) : IAuthService
+    public class AuthService(IRegisterCommand _register, IUserRepository _user, ICryptoService _crypto, IValidatorServices _validate, IJwtServices _jwt) : IAuthService
     {
         public async Task<ResponseRegistryDto> RegisterAsync(RequestRegistryDto user)
         {
             //Prepare Model
-            var userData = new UserModel(user.FirstName,
-                user.MiddleName ?? "",
-                user.LastName, user.Contact, user.Email, user.Password, user.Role);
+            var userData = new UserModel
+            {
+                FirstName = user.FirstName,
+                MiddleName = user.MiddleName ?? string.Empty,
+                LastName = user.LastName,
+                Email = _validate.IsValidEmail(user.Email).Result ? user.Email : throw new InvalidEmailFormat("Email is not in Standard"),
+                Contact = user.Contact,
+                PasswordHash = "",
+                Role = user.Role
+            };
             var hashPwd = _crypto.GenerateHasPassword(userData, user.Password);
             userData.PasswordHash = hashPwd;
             _ = await _register.RegisterUserCommand(userData);
 
             return new ResponseRegistryDto { Email = userData.Email };
         }
-        public async Task<bool> LoginAsync(RequestLoginDto userData)
+        public async Task<TokenResponse?> LoginAsync(RequestLoginDto userData)
         {
 
-            var userHashedPassword = await _user.GetUserCredentialByEmail(userData.Email);
+            var user = await _user.GetUserCredentialByEmail<UserModel>(userData.Email);
+            string userHashedPassword = user.PasswordHash;
+            var result = _crypto.IsPasswordValid(user: null!, hashedPassword: userHashedPassword, toBeComparedPassword: userData.Password);
+            return !result ? null : await _jwt.CreateTokens(user);
 
-            var result = _crypto.IsPasswordValid(user: null!, hashedPassword: userHashedPassword.PasswordHash, toBeComparedPassword: userData.Password);
-            return result;
+        }
+        public void SetCookie(TokenResponse request, HttpContext context)
+        {
+            context.Response.Cookies.Append("accessToken", request.AccessToken,
+                    new CookieOptions
+                    {
+                        Expires = DateTime.UtcNow.AddMinutes(5),
+                        IsEssential = true,
+                        HttpOnly = true,
+                        SameSite = SameSiteMode.Strict,
+                        Secure = true
+                    }
+                );
+            context.Response.Cookies.Append("refreshToken", request.RefreshToken,
+                    new CookieOptions
+                    {
+                        Expires = DateTime.UtcNow.AddDays(7),
+                        IsEssential = true,
+                        HttpOnly = true,
+                        SameSite = SameSiteMode.Strict,
+                        Secure = true
+                    }
+                );
+        }
+
+        public async Task<TokenResponse?> RefreshTokenAsync(string refreshToken)
+        {
+            var user = await _user.VerifyUserRefreshToken(refreshToken);
+            if (user is null || user.ExpireAt < DateTime.UtcNow) return null;
+            return await _jwt.CreateTokens(user);
 
         }
     }
